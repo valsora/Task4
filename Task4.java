@@ -14,6 +14,7 @@ public class Task4 {
         System.out.println("5. " + shortHand("vvvvaajaaaaa"));
         System.out.println("6. " + convertToRome(52));
         System.out.println("7. " + uniqueSubstring("12223234333"));
+        System.out.println("8. " + labirint(new int[][]{{1, 3, 1}, {1, -1, 1}, {4, 2, 1}}));
         System.out.println("9. " + numericOrder("t3o the5m 1One all6 r4ule ri2ng"));
         System.out.println("10. " + fibString("CCCABDD"));
     }
@@ -274,6 +275,39 @@ public class Task4 {
             if (count > biggestRepeat) biggestRepeat = count;
         }
         return biggestRepeat;
+    }
+
+    public static ArrayList<String> labirint(int[][] matrix) {
+        ArrayList<String> paths = new ArrayList<>(); 
+        int startCoord = matrix.length - 1;
+        addNodeToPath(paths, matrix, "", startCoord, startCoord);
+        int minSum = Integer.MAX_VALUE;
+        String minPath = "";
+        for (String path : paths) {
+            path = path.substring(1);
+            int sum = 0;
+            for (String node : path.split("-")) {
+                sum += Integer.parseInt(node);
+            }
+            if (sum < minSum) {
+                minSum = sum;
+                minPath = path;
+            }
+        }
+        ArrayList<String> result = new ArrayList<>();
+        if (minSum == Integer.MAX_VALUE) result.add("Прохода нет");
+        else {
+            result.add(minPath);
+            result.add(Integer.toString(minSum));
+        }
+        return result;
+    }
+
+    public static void addNodeToPath(ArrayList<String> paths, int[][] matrix, String path, int iNew, int jNew) {
+        if (iNew == 0 && jNew == 0) paths.add(path += "-" + matrix[0][0]);
+        path += "-" + matrix[iNew][jNew];
+        if (iNew - 1 >= 0 && matrix[iNew - 1][jNew] > 0) addNodeToPath(paths, matrix, path, iNew - 1, jNew);
+        if (jNew - 1 >= 0 && matrix[iNew][jNew - 1] > 0) addNodeToPath(paths, matrix, path, iNew, jNew - 1);
     }
 
     public static String numericOrder(String s) {
